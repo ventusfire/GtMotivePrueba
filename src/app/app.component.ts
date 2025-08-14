@@ -15,12 +15,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
-import { filter, Observable } from 'rxjs';
+import { filter } from 'rxjs';
 import { Store } from '@ngrx/store';
-import {
-  selectCurrentVehicleName,
-  selectFilteredMakes,
-} from './store/selectors/makes.selectors';
+import { selectCurrentVehicleName } from './store/selectors/makes.selectors';
 
 import * as MakesActions from './store/actions/allMakes.actions';
 

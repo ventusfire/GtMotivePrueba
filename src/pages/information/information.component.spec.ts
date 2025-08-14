@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InformationComponent } from './information.component';
+import { provideMockStore } from '@ngrx/store/testing';
+
+import InformationComponent from './information.component';
+import { inicialState } from '../../app/store/reducer/AllMakes.reducer';
+import { provideRouter } from '@angular/router';
 
 describe('InformationComponent', () => {
   let component: InformationComponent;
@@ -8,10 +12,13 @@ describe('InformationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [InformationComponent]
-    })
-    .compileComponents();
-    
+      imports: [InformationComponent],
+      providers: [
+        provideMockStore({ initialState: inicialState }),
+        provideRouter([]),
+      ],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(InformationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

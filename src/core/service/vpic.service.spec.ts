@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
 import { VpicService } from './vpic.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('VpicService', () => {
   let service: VpicService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({ imports: [HttpClient] });
+    TestBed.configureTestingModule({ imports: [HttpClientTestingModule] });
     service = TestBed.inject(VpicService);
   });
 
