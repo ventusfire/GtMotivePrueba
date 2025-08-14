@@ -48,4 +48,4 @@ export const selectVehicleTypes = createSelector(
   (state) => state.dataType?.Results ?? []
 );
 
-export const select;
+//export const select;
