@@ -1,7 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IAllMakes } from '../interfaces/interface';
+import {
+  IAllMakes,
+  IModelForMake,
+  IVehiclesType,
+} from '../interfaces/interface';
 import { environment } from '../../environments/environment.development';
 
 @Injectable({
@@ -17,9 +21,9 @@ export class VpicService {
     });
   }
 
-  getMakesFilter(name: string): Observable<IAllMakes> {
-    return this.http.get<IAllMakes>(
-      `${this.API_URL}GetVehicleTypesForMake/${name}`,
+  getVehicleTypesForMakeId(id: number): Observable<IVehiclesType> {
+    return this.http.get<IVehiclesType>(
+      `${this.API_URL}GetVehicleTypesForMakeId/${id}`,
       {
         params: { format: 'json' },
       }

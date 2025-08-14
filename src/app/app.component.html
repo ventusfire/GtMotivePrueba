@@ -1,31 +1,20 @@
- <h2>Makes</h2>
-
-
-<form class="example-form">
-  <mat-form-field class="example-full-width">
-    <mat-label>Select Make</mat-label>
-    <input type="text" matInput [formControl]="myControl" [matAutocomplete]="auto">
-    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-       @for (option of filteredOptions$ | async; track option) {
-    <mat-option [value]="option">{{option.Make_Name}}</mat-option>
+  <mat-toolbar>
+    <mat-icon class="text-white ml-1.5 mr-3.5">directions_car</mat-icon>
+  @if(currentVehicleName$ |async; as name){
+    <span class="text-white">{{name}} - {{ toolbarTitle  }}</span>
+  } @else {
+    <span class="text-white">{{ toolbarTitle  }}</span>
   }
-    </mat-autocomplete>
-  </mat-form-field>
-</form>
+  @if (toolbarTitle.includes('Vehicle Details')) {
+    <span class="flex-[1_1_auto]"></span>
+  <button mat-flat-button (click)="backBrandsB()">
+    <mat-icon>keyboard_backspace</mat-icon>
+    Back to Brands
+  </button>
+  }
+</mat-toolbar>
+<div>
+  <router-outlet />
+</div>
 
 
-    @if (loading$ | async) {
-      <div>Cargando...</div>
-
-    }
-        <cdk-virtual-scroll-viewport itemSize="50" class="viewport">
-          <mat-list>
-            <mat-list-item *cdkVirtualFor="let item of filteredMakes$ | async">
-              <button mat-button>{{ item.Make_Name }}</button>
-            </mat-list-item>
-          </mat-list>
-        </cdk-virtual-scroll-viewport>
-
-        <!-- @for (option of makes$| async; track option) {
-    <li [value]="option.Make_Name">{{option.Make_Name}}</li>
-  } -->

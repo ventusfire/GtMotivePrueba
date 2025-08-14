@@ -1,5 +1,9 @@
 import { createAction, props } from '@ngrx/store';
-import { IAllMakes } from '../../../core/interfaces/interface';
+import {
+  IAllMakes,
+  IModelForMake,
+  IVehiclesType,
+} from '../../../core/interfaces/interface';
 
 export const LoadAllMakes = createAction('[GET API] Load AllMakes');
 
@@ -16,4 +20,20 @@ export const getAllError = createAction(
 export const makesFilter = createAction(
   '[FILTER] Makes Filter',
   props<{ filter: string }>()
+);
+
+// Vehicle Types
+
+export const LoadmakesTypesAndModel = createAction(
+  '[GET MODEL] Load Makes Type And Model available',
+  props<{ id: number }>()
+);
+
+export const makesTypesAndModelSuccess = createAction(
+  '[GET MODEL] Load Makes Type And Model available Success',
+  props<{ dataType: IVehiclesType }>()
+);
+
+export const clearCurrentVehicle = createAction(
+  '[CLEAR VEHICLE] clear current vehicle name'
 );

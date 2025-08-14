@@ -1,11 +1,22 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { VpicService } from '../../../core/service/vpic.service';
 import * as MakesActions from '../actions/allMakes.actions';
-import { catchError, debounceTime, map, mergeMap, of, switchMap } from 'rxjs';
+import {
+  catchError,
+  debounceTime,
+  filter,
+  map,
+  mergeMap,
+  of,
+  switchMap,
+  tap,
+} from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class AllMakesEffects {
+  router = inject(Router);
   constructor(private actions$: Actions, private makesService: VpicService) {}
 
   loadAllMakes$ = createEffect(() =>
@@ -20,17 +31,17 @@ export class AllMakesEffects {
     )
   );
 
-  searchMakes$ = createEffect(() =>
+  searchVehicleTypes$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(MakesActions.makesFilter),
-      debounceTime(300),
-      map((action) => action.filter),
-      switchMap((name) =>
-        this.makesService.getMakesFilter(name).pipe(
-          map(
-            (data) => MakesActions.LoadAllMakesSuccess({ data }),
-            catchError((error) => of(MakesActions.getAllError({ error })))
-          )
+      ofType(MakesActions.LoadmakesTypesAndModel),
+      map((action) => action.id),
+      mergeMap((id) =>
+        this.makesService.getVehicleTypesForMakeId(id).pipe(
+          map((dataType) =>
+            MakesActions.makesTypesAndModelSuccess({ dataType })
+          ),
+          tap(() => this.router.navigate(['/information', id])),
+          catchError((error) => of(MakesActions.getAllError({ error })))
         )
       )
     )

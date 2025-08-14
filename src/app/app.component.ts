@@ -4,30 +4,25 @@ import {
   inject,
   OnInit,
 } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  Router,
+  RouterOutlet,
+} from '@angular/router';
+
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { CommonModule } from '@angular/common';
+import { filter, Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import {
-  CdkVirtualScrollViewport,
-  ScrollingModule,
-} from '@angular/cdk/scrolling';
-import { MatListModule } from '@angular/material/list';
-import {
-  MatAutocomplete,
-  MatAutocompleteModule,
-  MatOption,
-} from '@angular/material/autocomplete';
-import {
-  selectAllMakesData,
-  selectMakeLoading,
+  selectCurrentVehicleName,
+  selectFilteredMakes,
 } from './store/selectors/makes.selectors';
+
 import * as MakesActions from './store/actions/allMakes.actions';
-import { AsyncPipe, CommonModule } from '@angular/common';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { combineLatest, map, Observable, startWith } from 'rxjs';
-import { IAllMakes, IResult } from '../core/interfaces/interface';
 
 export interface User {
   name: string;
@@ -37,19 +32,11 @@ export interface User {
   selector: 'app-root',
   standalone: true,
   imports: [
-    CommonModule,
     RouterOutlet,
-    AsyncPipe,
-    ScrollingModule,
-    MatListModule,
-    MatAutocomplete,
-    MatOption,
-    FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatAutocompleteModule,
-    ReactiveFormsModule,
+    MatToolbarModule,
+    MatIconModule,
     MatButtonModule,
+    CommonModule,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
@@ -58,41 +45,40 @@ export interface User {
 export class AppComponent implements OnInit {
   title = 'GtMotivePrueba';
 
+  toolbarTitle = 'Vehicle Information System';
+
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private store = inject(Store);
+  currentVehicleName$ = this.store.select(selectCurrentVehicleName);
 
-  makes$ = this.store.select(selectAllMakesData);
-  loading$ = this.store.select(selectMakeLoading);
-
-  myControl = new FormControl<string | IResult>('');
-  filteredOptions$!: Observable<IResult[]>;
-  filteredMakes$!: Observable<IResult[]>;
-
-  ngOnInit() {
-    this.load();
-    this.filteredMakes$ = combineLatest([
-      this.makes$,
-      this.myControl.valueChanges.pipe(startWith('')),
-    ]).pipe(
-      map(([makes, value]) => {
-        const filterValue =
-          typeof value === 'string'
-            ? value.toLowerCase()
-            : value?.Make_Name?.toLowerCase() ?? '';
-        return makes.filter((make) =>
-          make.Make_Name.toLocaleLowerCase().startsWith(filterValue)
-        );
-      })
-    );
-    this.filteredOptions$ = this.filteredMakes$.pipe(
-      map((makes) => makes.slice(0, 10))
-    );
+  ngOnInit(): void {
+    this.router.events
+      .pipe(
+        filter(
+          (event): event is NavigationEnd => event instanceof NavigationEnd
+        )
+      )
+      .subscribe((res: NavigationEnd) => {
+        const id = this.route.firstChild?.snapshot.paramMap.get('id');
+        switch (res.urlAfterRedirects) {
+          case '/home':
+            this.toolbarTitle = 'Vehicle Information System';
+            break;
+          case `/information/${id}`:
+            this.toolbarTitle = `Vehicle Details`;
+            break;
+          default:
+            this.toolbarTitle;
+        }
+      });
   }
 
-  load() {
-    this.store.dispatch(MakesActions.LoadAllMakes());
-  }
-
-  displayFn(user: IResult): string {
-    return user && user.Make_Name ? user.Make_Name : '';
+  backBrandsB(): void {
+    this.router.navigate(['home']);
+    this.store.dispatch(MakesActions.clearCurrentVehicle());
+    this.store
+      .select(selectCurrentVehicleName)
+      .subscribe((res) => console.log(res));
   }
 }

@@ -1,0 +1,15 @@
+<div class="flex flex-col">
+<mat-card class="w-[90%] ">
+  <mat-chip-set
+  class="example-chip"
+  cdkDropList
+  cdkDropListOrientation="horizontal"
+  >
+  @for (item of vehicleTypes$ | async; track $index) {
+    <mat-chip class="example-box" cdkDrag>{{item.VehicleTypeName}}</mat-chip>
+  }
+</mat-chip-set>
+</mat-card>
+</div>
+
+<!-- <h1>{{  }}</h1> -->
