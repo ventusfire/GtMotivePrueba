@@ -22,7 +22,7 @@ export const makesFilter = createAction(
   props<{ filter: string }>()
 );
 
-// Vehicle Types
+// Vehicle Types and Models
 
 export const LoadmakesTypesAndModel = createAction(
   '[GET MODEL] Load Makes Type And Model available',
@@ -31,7 +31,7 @@ export const LoadmakesTypesAndModel = createAction(
 
 export const makesTypesAndModelSuccess = createAction(
   '[GET MODEL] Load Makes Type And Model available Success',
-  props<{ dataType: IVehiclesType }>()
+  props<{ dataType: IVehiclesType; dataModels: IModelForMake }>()
 );
 
 export const clearCurrentVehicle = createAction(

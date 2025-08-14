@@ -22,7 +22,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { Store } from '@ngrx/store';
-import { combineLatest, map, Observable, startWith } from 'rxjs';
+import { combineLatest, map, Observable, startWith, take } from 'rxjs';
 import {
   selectFilteredMakes,
   selectMakeLoading,

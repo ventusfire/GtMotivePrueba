@@ -77,8 +77,6 @@ export class AppComponent implements OnInit {
   backBrandsB(): void {
     this.router.navigate(['home']);
     this.store.dispatch(MakesActions.clearCurrentVehicle());
-    this.store
-      .select(selectCurrentVehicleName)
-      .subscribe((res) => console.log(res));
+    this.store.dispatch(MakesActions.makesFilter({ filter: '' }));
   }
 }

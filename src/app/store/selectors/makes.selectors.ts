@@ -48,4 +48,9 @@ export const selectVehicleTypes = createSelector(
   (state) => state.dataType?.Results ?? []
 );
 
-//export const select;
+// Models
+
+export const selectModels = createSelector(
+  selectMakesState,
+  (state) => state.dataModels?.Results ?? []
+);

@@ -6,6 +6,7 @@ import {
   catchError,
   debounceTime,
   filter,
+  forkJoin,
   map,
   mergeMap,
   of,
@@ -36,9 +37,12 @@ export class AllMakesEffects {
       ofType(MakesActions.LoadmakesTypesAndModel),
       map((action) => action.id),
       mergeMap((id) =>
-        this.makesService.getVehicleTypesForMakeId(id).pipe(
-          map((dataType) =>
-            MakesActions.makesTypesAndModelSuccess({ dataType })
+        forkJoin({
+          dataType: this.makesService.getVehicleTypesForMakeId(id),
+          dataModels: this.makesService.getModelsAvailableId(id),
+        }).pipe(
+          map(({ dataType, dataModels }) =>
+            MakesActions.makesTypesAndModelSuccess({ dataType, dataModels })
           ),
           tap(() => this.router.navigate(['/information', id])),
           catchError((error) => of(MakesActions.getAllError({ error })))

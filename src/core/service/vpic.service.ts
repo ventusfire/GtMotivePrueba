@@ -29,4 +29,13 @@ export class VpicService {
       }
     );
   }
+
+  getModelsAvailableId(id: number): Observable<IModelForMake> {
+    return this.http.get<IModelForMake>(
+      `${this.API_URL}GetModelsForMakeId/${id}`,
+      {
+        params: { format: 'json' },
+      }
+    );
+  }
 }
