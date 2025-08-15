@@ -1,0 +1,33 @@
+<div class="bg-[#ffff] flex flex-col">
+  <div class="flex flex-col items-center pt-3.5">
+    <h2>Vehicle brands</h2>
+    <P class="text-gray-400">Select a brand to view available Vehicle types and models</P>
+  </div>
+
+
+
+          <mat-form-field color="accent" class="w-[90%] self-center pt-3.5">
+            <mat-icon matPrefix color="accent">search</mat-icon>
+            <mat-label color="accent">Select Make</mat-label>
+            <input type="text" (input)="search($event)" matInput [formControl]="myControl" [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+              @for (option of filteredOptions$ | async; track option) {
+            <mat-option (click)="search(option.Make_Name)" [value]="option">{{option.Make_Name}}</mat-option>
+          }
+            </mat-autocomplete>
+          </mat-form-field>
+
+            @if (loading$ | async) {
+              <mat-spinner class="self-center"></mat-spinner>
+            } @else {
+
+              <cdk-virtual-scroll-viewport itemSize="50" class="w[90%] h-[100vh]">
+                <mat-list>
+                  <mat-list-item *cdkVirtualFor="let item of makes$ | async">
+                    <button (click)="typesAndModels(item)" mat-flat-button>{{ item.Make_Name }}</button>
+                  </mat-list-item>
+                </mat-list>
+              </cdk-virtual-scroll-viewport>
+            }
+  </div>
+
