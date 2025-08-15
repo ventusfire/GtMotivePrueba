@@ -15,6 +15,15 @@ export class VpicService {
   private readonly API_URL = environment.API;
   private readonly http = inject(HttpClient);
 
+  /**
+   *Lo normal mas correcto sería que los metodos retornen el/los objetos a utilizar ej:
+    getAllMakes(): Observable<IResult[]> {
+    return this.http.get<IAllMakes>(`${this.API_URL}getallmakes`, {
+      params: { format: 'json' },
+    }).pipe(map(res =>  res.Results));
+  }
+   */
+
   getAllMakes(): Observable<IAllMakes> {
     return this.http.get<IAllMakes>(`${this.API_URL}getallmakes`, {
       params: { format: 'json' },
